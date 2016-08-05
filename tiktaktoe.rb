@@ -1,9 +1,7 @@
-$board = []
-
 def start_game
-	$board = [[],[],[]], [[],[],[]], [[],[],[]]
+	$board = [[],[],[]], [[],[],[]], [[],[],[]] #creates game board
 	puts " --NEW GAME --"
-	if rand(1..2) == 1
+	if rand(1..2) == 1 #randomizes starting player. 50/50 chance for either
 		puts "You move first, human"
 		player_turn
 	else
@@ -16,11 +14,11 @@ def cpu_turn
 	puts "My turn"
 	valid_move = false
 
-	while valid_move == false
+	while valid_move == false #CPU chooses a random spot on the board
 		a = rand(0..2)
 		b = rand(0..2)
 
-		if $board[a][b] == []			
+		if $board[a][b] == [] #if spot is empty, CPU takes that spot		
 			$board[a][b] = "O"
 			valid_move = true
 		end
@@ -35,7 +33,7 @@ end
 def player_turn
 	puts "Your turn. Choose your tile"
 	tile = gets.chomp
-	case tile
+	case tile #very long case that ensures player can't overwrite taken spot
 	when "7"
 		$board[0][0] = "X" if $board[0][0] == []
 	when "8"
@@ -62,7 +60,7 @@ def player_turn
 	cpu_turn
 end
 
-def show_board
+def show_board #diplays board. This will only display properly in Terminal
 	$board.each do |i|
 		p i
 	end
@@ -70,22 +68,20 @@ end
 
 def check_for_draw
 	draw = true
-	$board.each do |i|
-		i.each do |x|
-			if x == []
-				draw = false
-			end
+	$board.each do |i| #if any spot is still empty the game can't be a draw
+		if i.include?([])
+			draw = false
 		end
 	end
 
-	if draw
+	if draw #all spots were taken
 		puts "A pathetic draw"
 		start_game
 	end
 end
 
-def check_for_winner(winner_message)
-	if [$board[0][0],$board[1][0],$board[2][0]].uniq.length == 1 && $board[0][0] != []
+def check_for_winner(winner_message) #manually checks each winning position for 3-in-a-row
+	if [$board[0][0],$board[1][0],$board[2][0]].uniq.length == 1 && $board[0][0] != [] #had to include last part so empty spaces didn't trigger a win
 		puts winner_message
 		start_game
 	elsif [$board[0][1],$board[1][1],$board[2][1]].uniq.length == 1 && $board[0][1] != []
